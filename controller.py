@@ -14,7 +14,7 @@ logging.basicConfig(
 
 logger = logging.getLogger(__name__)
 
-logger.info("Govee controller starting up...")
+logger.info(f"Govee controller starting up...{datetime.now()}")
 
 # Load config from environment variables set by Docker/Portainer
 GOVEE_API_KEY = os.getenv("GOVEE_API_KEY")
