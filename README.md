@@ -124,9 +124,9 @@ This returns JSON with your registered devices and their details, including `dev
 
 | Variable        | Description                              | Default       |
 |-----------------|------------------------------------------|---------------|
-| GOVEE_API_KEY   | Your Govee API key                       | (required)    |
-| DEVICE_MAC      | MAC address of your Govee device         | (required)    |
-| DEVICE_MODEL    | Model number of your Govee device        | (required)    |
+| GOVEE_API_KEY   | Your Govee API key                       | Required      |
+| DEVICE_MAC      | MAC address of your Govee device         | Required      |
+| DEVICE_MODEL    | Model number of your Govee device        | Required      |
 | LAT             | Latitude for weather API                 | Required      |
 | LON             | Longitude for weather API                | Required      |
 | TEMP_THRESHOLD  | Temperature °F threshold to turn ON plug | 75            |
