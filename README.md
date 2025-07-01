@@ -5,39 +5,34 @@ A Python script and Docker container that automatically controls a Govee smart p
 
 ---
 
-## Features
+## ✅ Features
 
-- Fetches temperature and cloud cover from the Open-Meteo API.
-- Turns Govee smart plug ON or OFF based on user-configurable thresholds.
-- Runs continuously with configurable check intervals.
-- Gracefully handles shutdown signals to turn off the plug.
-- Configurable via environment variables, suitable for Docker deployment.
+- Pulls current weather from the Open-Meteo API
+- Turns Govee smart plug ON or OFF using configurable thresholds
+- Runs on a schedule with graceful shutdown handling
+- Deployable via Docker or Docker Compose
+- Pushes to GitHub Container Registry for easy Portainer or cloud deployment
 
 ---
 
-## Getting Started
+## 🚀 Quick Start
 
-### Prerequisites
-
-- Python 3.8+
-- Docker (optional, for containerized deployment)
-- Govee smart plug and Govee API key
-
-### Setup
-
-1. Clone this repository:
+### 1. Clone the Repository
 
 ```bash
-git clone https://github.com/TheJuice79/govee-controller.git
-cd govee-controller
+git clone https://github.com/TheJuice79/govee-smart-plug-controller.git
+cd govee-smart-plug-controller
 ```
 
-2. Create a `.env` file in the project root and add your configuration:
+### 2. Create a `.env` File
+
+Create a `.env` file in the root directory with your configuration:
 
 ```env
-GOVEE_API_KEY=your_govee_api_key_here
-DEVICE_MAC=your_device_mac_address_here
-DEVICE_MODEL=your_device_model_here
+TZ=America/Chicago
+GOVEE_API_KEY=your_govee_api_key
+DEVICE_MAC=your_device_mac
+DEVICE_MODEL=your_device_model
 LAT=39.828
 LON=-98.580
 TEMP_THRESHOLD=75
@@ -45,59 +40,27 @@ CLOUD_THRESHOLD=50
 CHECK_INTERVAL=15
 ```
 
-3. Run the script locally:
+---
 
-```bash
-pip install -r requirements.txt
-python govee_controller.py
-```
+## 🐳 Using Docker
 
-4. (Optional) Build and run with Docker:
+### Build Locally
 
 ```bash
 docker build -t govee-controller .
-docker run --env-file .env govee-controller
 ```
+
+### Run
+
+```bash
+docker run --env-file .env --restart unless-stopped --name govee-controller ghcr.io/thejuice79/goveesmartplugcontroller:latest
+```
+
 ---
 
-## Using Docker and/or Docker Compose
+## 🧱 Using Docker Compose
 
-This project is Docker-friendly and can be easily deployed using Docker and/or Docker Compose.
-
-### 🐳 Docker (Manual Build and Run)
-
-Build and run the container manually:
-
-```bash
-docker build -t govee-controller https://github.com/TheJuice79/govee-smart-plug-controller.git#main
-```
-
-Run the container using your .env file:
-```bash
-docker run --env-file .env --restart unless-stopped --name govee-controller govee-controller
-```
-
-To run it in the background (detached mode):
-```bash
-docker run -d --env-file .env --restart unless-stopped --name govee-controller govee-controller
-```
-
-### 🧱 Docker Compose
-
-You can use Docker Compose for simplified management.
-
-Option 1: Using a `.env` file
-```yaml
-version: '3.8'
-
-services:
-  govee-controller:
-    image: ghcr.io/thejuice79/govee-smart-plug-controller:latest
-    env_file: .env
-    container_name: govee-controller
-    restart: unless-stopped
-```
-Option 2: Using inline environment variables
+Create a `docker-compose.yml`:
 
 ```yaml
 version: '3.8'
@@ -105,20 +68,22 @@ version: '3.8'
 services:
   govee-controller:
     container_name: govee-controller
-    image: ghcr.io/thejuice79/govee-smart-plug-controller:latest
+    image: ghcr.io/thejuice79/goveesmartplugcontroller:latest
     environment:
-      GOVEE_API_KEY: your_govee_api_key_here
-      DEVICE_MAC: your_device_mac_address_here
-      DEVICE_MODEL: your_device_model_here
-      LAT: "39.828"
-      LON: "-98.580"
-      TEMP_THRESHOLD: "75"
-      CLOUD_THRESHOLD: "50"
-      CHECK_INTERVAL: "15"
+      - TZ=America/Chicago
+      - GOVEE_API_KEY=your_govee_api_key
+      - DEVICE_MAC=your_device_mac
+      - DEVICE_MODEL=your_device_model
+      - LAT=39.828
+      - LON=-98.580
+      - TEMP_THRESHOLD=75
+      - CLOUD_THRESHOLD=50
+      - CHECK_INTERVAL=15
     restart: unless-stopped
 ```
 
-Start the container:
+Then start with:
+
 ```bash
 docker compose up -d
 ```
@@ -196,6 +161,22 @@ This returns JSON with your registered devices and their details, including `dev
 | TEMP_THRESHOLD  | Temperature °F threshold to turn ON plug | 75            |
 | CLOUD_THRESHOLD | Cloud cover % threshold to turn ON plug  | 50            |
 | CHECK_INTERVAL  | Minutes between weather checks           | 15            |
+
+---
+
+## 📦 GitHub Container Registry (GHCR)
+
+Image is available here:
+
+```
+ghcr.io/thejuice79/goveesmartplugcontroller:latest
+```
+
+You can pull and run it anywhere with:
+
+```bash
+docker pull ghcr.io/thejuice79/goveesmartplugcontroller:latest
+```
 
 ---
 
