@@ -58,6 +58,70 @@ python govee_controller.py
 docker build -t govee-controller .
 docker run --env-file .env govee-controller
 ```
+---
+
+## Using Docker and/or Docker Compose
+
+This project is Docker-friendly and can be easily deployed using Docker and/or Docker Compose.
+
+### 🐳 Docker (Manual Build and Run)
+
+Build and run the container manually:
+
+```bash
+docker build -t govee-controller https://github.com/TheJuice79/govee-smart-plug-controller.git#main
+```
+
+Run the container using your .env file:
+```bash
+docker run --env-file .env --restart unless-stopped --name govee-controller govee-controller
+```
+
+To run it in the background (detached mode):
+```bash
+docker run -d --env-file .env --restart unless-stopped --name govee-controller govee-controller
+```
+
+### 🧱 Docker Compose
+
+You can use Docker Compose for simplified management.
+
+Option 1: Using a `.env` file
+```yaml
+version: '3.8'
+
+services:
+  govee-controller:
+    image: ghcr.io/thejuice79/govee-smart-plug-controller:latest
+    env_file: .env
+    container_name: govee-controller
+    restart: unless-stopped
+```
+Option 2: Using inline environment variables
+
+```yaml
+version: '3.8'
+
+services:
+  govee-controller:
+    container_name: govee-controller
+    image: ghcr.io/thejuice79/govee-smart-plug-controller:latest
+    environment:
+      GOVEE_API_KEY: your_govee_api_key_here
+      DEVICE_MAC: your_device_mac_address_here
+      DEVICE_MODEL: your_device_model_here
+      LAT: "39.828"
+      LON: "-98.580"
+      TEMP_THRESHOLD: "75"
+      CLOUD_THRESHOLD: "50"
+      CHECK_INTERVAL: "15"
+    restart: unless-stopped
+```
+
+Start the container:
+```bash
+docker compose up -d
+```
 
 ---
 
