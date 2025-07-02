@@ -30,7 +30,6 @@ cd govee-smart-plug-controller
 Create a `.env` file in the root directory with your configuration:
 
 ```env
-TZ=America/Chicago
 GOVEE_API_KEY=your_govee_api_key
 DEVICE_MAC=your_device_mac
 DEVICE_MODEL=your_device_model
@@ -39,6 +38,7 @@ LON=-98.5855
 TEMP_THRESHOLD=75
 CLOUD_THRESHOLD=50
 CHECK_INTERVAL=15
+TZ=America/Chicago
 ```
 
 ---
@@ -71,7 +71,6 @@ services:
     container_name: govee-controller
     image: ghcr.io/thejuice79/govee-smart-plug-controller:latest
     environment:
-      - TZ=America/Chicago
       - GOVEE_API_KEY=your_govee_api_key
       - DEVICE_MAC=your_device_mac
       - DEVICE_MODEL=your_device_model
@@ -80,6 +79,7 @@ services:
       - TEMP_THRESHOLD=75
       - CLOUD_THRESHOLD=50
       - CHECK_INTERVAL=15
+      - TZ=America/Chicago
     restart: unless-stopped
 ```
 
