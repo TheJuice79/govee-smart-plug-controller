@@ -54,7 +54,7 @@ docker build -t govee-controller .
 ### Run
 
 ```bash
-docker run --env-file .env --restart unless-stopped --name govee-controller ghcr.io/thejuice79/goveesmartplugcontroller:latest
+docker run --env-file .env --restart unless-stopped --name govee-controller ghcr.io/thejuice79/govee-smart-plug-controller:latest
 ```
 
 ---
@@ -69,7 +69,7 @@ version: '3.8'
 services:
   govee-controller:
     container_name: govee-controller
-    image: ghcr.io/thejuice79/goveesmartplugcontroller:latest
+    image: ghcr.io/thejuice79/govee-smart-plug-controller:latest
     environment:
       - TZ=America/Chicago
       - GOVEE_API_KEY=your_govee_api_key
@@ -169,13 +169,13 @@ This returns JSON with your registered devices and their details, including `dev
 Image is available here:
 
 ```
-ghcr.io/thejuice79/goveesmartplugcontroller:latest
+ghcr.io/thejuice79/govee-smart-plug-controller:latest
 ```
 
 You can pull and run it anywhere with:
 
 ```bash
-docker pull ghcr.io/thejuice79/goveesmartplugcontroller:latest
+docker pull ghcr.io/thejuice79/govee-smart-plug-controller:latest
 ```
 
 ---
