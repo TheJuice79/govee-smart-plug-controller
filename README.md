@@ -76,6 +76,8 @@ services:
       - DEVICE_MODEL=your_device_model
       - LAT=39.8333
       - LON=-98.5855
+      - START_TIME=00:00
+      - END_TIME=23:59
       - TEMP_THRESHOLD=75
       - CLOUD_THRESHOLD=50
       - CHECK_INTERVAL=15
@@ -159,8 +161,10 @@ This returns JSON with your registered devices and their details, including `dev
 | `DEVICE_MODEL`   | ✅       | Model number of the Govee plug (e.g., `H5083`)                              |
 | `LAT`            | ✅       | Latitude of your location (e.g., `44.2760`)                                 |
 | `LON`            | ✅       | Longitude of your location (e.g., `-88.2724`)                               |
-| `TEMP_THRESHOLD` | ❌       | Temperature in °F above which the plug turns ON (default: `75`)            |
-| `CLOUD_THRESHOLD`| ❌       | Cloud cover percentage below which the plug turns ON (default: `50`)       |
+| `START_TIME`     | ❌       | The earliest time of day (in `HH:MM` 24-hour format) to allow plug control. |
+| `END_TIME  `     | ❌       | The latest time of day (in `HH:MM` 24-hour format) to allow plug control.   |
+| `TEMP_THRESHOLD` | ❌       | Temperature in °F above which the plug turns ON (default: `75`)             |
+| `CLOUD_THRESHOLD`| ❌       | Cloud cover percentage below which the plug turns ON (default: `50`)        |
 | `CHECK_INTERVAL` | ❌       | Time between weather checks, in minutes (default: `15`)                     |
 | `TZ`             | ❌       | Time zone for logging/scheduling (e.g., `America/Chicago`). [See full list](https://en.wikipedia.org/wiki/List_of_tz_database_time_zones) |
 
