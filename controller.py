@@ -173,6 +173,8 @@ def main():
         f"DEVICE_MODEL={DEVICE_MODEL}, "
         f"LAT={LAT}, "
         f"LON={LON}, "
+        f"START_TIME={START_TIME}, "
+        f"END_TIME={END_TIME}, "
         f"TEMP_THRESHOLD={TEMP_THRESHOLD}, "
         f"CLOUD_THRESHOLD={CLOUD_THRESHOLD}, "
         f"CHECK_INTERVAL={CHECK_INTERVAL} seconds"
