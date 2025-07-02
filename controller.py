@@ -4,7 +4,7 @@ import os
 import time
 import signal
 import sys
-from datetime import datetime
+from datetime import datetime, time as dtime
 
 # Configure logging format and level
 logging.basicConfig(
@@ -17,14 +17,47 @@ logger = logging.getLogger(__name__)
 logger.info(f"Govee controller starting up...{datetime.now()}")
 
 # Load config from environment variables set by Docker/Portainer
+# Govee API key used to authenticate requests to Govee's cloud API
 GOVEE_API_KEY = os.getenv("GOVEE_API_KEY")
+
+# MAC address of the specific Govee device you want to control (e.g. "A1:B2:C3:D4:E5:F6")
 DEVICE_MAC = os.getenv("DEVICE_MAC")
+
+# Model number of the Govee device (e.g. "H5086") — required for control API calls
 DEVICE_MODEL = os.getenv("DEVICE_MODEL")
-LAT = float(os.getenv("LAT"))
-LON = float(os.getenv("LON"))
-TEMP_THRESHOLD = float(os.getenv("TEMP_THRESHOLD", 75))    # Temperature threshold in °F (Default 75°F)
-CLOUD_THRESHOLD = float(os.getenv("CLOUD_THRESHOLD", 50))  # Cloud cover threshold in % (Default 50%)
-CHECK_INTERVAL = float(os.getenv("CHECK_INTERVAL", 15)) * 60  # Time between checks in seconds (Default 15 min)
+
+# Geographic coordinates used to retrieve local weather data via Open-Meteo API
+LAT = float(os.getenv("LAT"))  # Latitude (e.g. 44.280)
+LON = float(os.getenv("LON"))  # Longitude (e.g. -88.292)
+
+# Time window (24-hour HH:MM format) during which the plug is allowed to be automatically turned on/off
+START_TIME = os.getenv("START_TIME", "00:00")  # Default: always allowed from midnight
+END_TIME = os.getenv("END_TIME", "23:59")      # Default: always allowed until end of day
+
+# Weather-based control thresholds
+TEMP_THRESHOLD = float(os.getenv("TEMP_THRESHOLD", 75))    # Temperature in °F to turn ON plug (default: 75°F)
+CLOUD_THRESHOLD = float(os.getenv("CLOUD_THRESHOLD", 50))  # Max cloud cover % to allow plug ON (default: 50%)
+
+# Interval between weather checks, in seconds (default: 15 minutes)
+CHECK_INTERVAL = float(os.getenv("CHECK_INTERVAL", 15)) * 60
+
+from datetime import time as dtime
+
+def is_within_time_window():
+    now = datetime.now().time()
+    try:
+        start = dtime.fromisoformat(START_TIME)
+        end = dtime.fromisoformat(END_TIME)
+    except ValueError:
+        logger.warning("Invalid START_TIME or END_TIME format. Expected HH:MM. Proceeding with plug control.")
+        return True  # fail-open for safety
+
+    if start <= end:
+        return start <= now <= end
+    else:
+        # Time range spans midnight (e.g., 22:00 to 06:00)
+        return now >= start or now <= end
+
 
 def graceful_shutdown(signum, frame):
     """
@@ -146,6 +179,11 @@ def main():
     )
 
     while True:
+        if not is_within_time_window():
+            logger.info("Outside allowed time window. Skipping plug control.")
+            time.sleep(CHECK_INTERVAL)
+            continue
+
         now = datetime.now()
         hour = now.hour
 
