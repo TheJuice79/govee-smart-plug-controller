@@ -12,6 +12,7 @@ A Python script and Docker container that automatically controls a Govee smart p
 - Runs on a schedule with graceful shutdown handling
 - Deployable via Docker or Docker Compose
 - Pushes to GitHub Container Registry for easy Portainer or cloud deployment
+- Logs with time zone awareness
 
 ---
 
@@ -33,8 +34,8 @@ TZ=America/Chicago
 GOVEE_API_KEY=your_govee_api_key
 DEVICE_MAC=your_device_mac
 DEVICE_MODEL=your_device_model
-LAT=39.828
-LON=-98.580
+LAT=39.8333
+LON=-98.5855
 TEMP_THRESHOLD=75
 CLOUD_THRESHOLD=50
 CHECK_INTERVAL=15
@@ -74,8 +75,8 @@ services:
       - GOVEE_API_KEY=your_govee_api_key
       - DEVICE_MAC=your_device_mac
       - DEVICE_MODEL=your_device_model
-      - LAT=39.828
-      - LON=-98.580
+      - LAT=39.8333
+      - LON=-98.5855
       - TEMP_THRESHOLD=75
       - CLOUD_THRESHOLD=50
       - CHECK_INTERVAL=15
@@ -149,20 +150,19 @@ This returns JSON with your registered devices and their details, including `dev
 
 ---
 
-## Environment Variables
+## 🛠 Environment Variables
 
-| Variable        | Description                              | Default       |
-|-----------------|------------------------------------------|---------------|
-| GOVEE_API_KEY   | Your Govee API key                       | Required      |
-| DEVICE_MAC      | MAC address of your Govee device         | Required      |
-| DEVICE_MODEL    | Model number of your Govee device        | Required      |
-| LAT             | Latitude for weather API                 | Required      |
-| LON             | Longitude for weather API                | Required      |
-| TEMP_THRESHOLD  | Temperature °F threshold to turn ON plug | 75            |
-| CLOUD_THRESHOLD | Cloud cover % threshold to turn ON plug  | 50            |
-| CHECK_INTERVAL  | Minutes between weather checks           | 15            |
-
----
+| Variable         | Required | Description                                                                 |
+|------------------|----------|-----------------------------------------------------------------------------|
+| `GOVEE_API_KEY`  | ✅       | Your Govee API key from [developer.govee.com](https://developer.govee.com/) |
+| `DEVICE_MAC`     | ✅       | MAC address of the Govee plug (format: `AA:BB:CC:DD:EE:FF`)                 |
+| `DEVICE_MODEL`   | ✅       | Model number of the Govee plug (e.g., `H5083`)                              |
+| `LAT`            | ✅       | Latitude of your location (e.g., `44.2760`)                                 |
+| `LON`            | ✅       | Longitude of your location (e.g., `-88.2724`)                               |
+| `TEMP_THRESHOLD` | ❌       | Temperature in °F above which the plug turns ON (default: `75`)            |
+| `CLOUD_THRESHOLD`| ❌       | Cloud cover percentage below which the plug turns ON (default: `50`)       |
+| `CHECK_INTERVAL` | ❌       | Time between weather checks, in minutes (default: `15`)                     |
+| `TZ`             | ❌       | Time zone for logging/scheduling (e.g., `America/Chicago`). [See full list](https://en.wikipedia.org/wiki/List_of_tz_database_time_zones) |
 
 ## 📦 GitHub Container Registry (GHCR)
 
