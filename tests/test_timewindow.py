@@ -2,6 +2,18 @@ import sys
 import os
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
+# Minimum required environment variables to load controller.py successfully
+os.environ["LAT"] = "44.280"
+os.environ["LON"] = "-88.292"
+os.environ["GOVEE_API_KEY"] = "test"
+os.environ["DEVICE_MAC"] = "test"
+os.environ["DEVICE_MODEL"] = "H5086"
+os.environ["START_TIME"] = "09:00"
+os.environ["END_TIME"] = "18:00"
+os.environ["TEMP_THRESHOLD"] = "75"
+os.environ["CLOUD_THRESHOLD"] = "50"
+os.environ["CHECK_INTERVAL"] = "15"
+
 from datetime import datetime, time
 from controller import is_within_time_window
 
