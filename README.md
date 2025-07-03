@@ -9,6 +9,7 @@ A Python script and Docker container that automatically controls a Govee smart p
 
 - Pulls current weather from the Open-Meteo API
 - Turns Govee smart plug ON or OFF using configurable thresholds
+- Only runs between defined `START_TIME` and `END_TIME`; sleeps until next start time when outside window
 - Runs on a schedule with graceful shutdown handling
 - Deployable via Docker or Docker Compose
 - Pushes to GitHub Container Registry for easy Portainer or cloud deployment
