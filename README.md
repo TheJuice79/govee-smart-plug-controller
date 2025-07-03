@@ -207,36 +207,53 @@ This project is licensed under the [Apache License 2.0](https://www.apache.org/l
 
 ## 📋 Changelog
 
-### [v1.2.1] - 2025-07-03
+### [v1.3.0] - 2025-07-03
+#### Added
+- Support for `TEMP_UNIT` environment variable to choose between `"fahrenheit"` or `"celsius"` when fetching weather data.
+- Validation logic: script now exits with an error if `TEMP_UNIT` is set to an invalid value.
+- Weather-fetching logic updated to use the correct `temperature_unit` parameter with Open‑Meteo API.
+
+#### Changed
+- Default configuration now assumes `TEMP_UNIT=fahrenheit` if not set.
+
+#### Fixed
+- Unit tests using `pytest` + `monkeypatch` to validate:
+  - Valid units (`"fahrenheit"` and `"celsius"`) work correctly.
+  - Invalid input (e.g. `"kelvin"`) triggers expected exit.
+
+---
+
+### [v1.2.1] - 2025-07-02
 - Restructured project layout into `/app` package with `__init__.py`.
-- Fixed `ModuleNotFoundError: No module named 'app'` by ensuring relative imports align with package layout.
-- Updated Dockerfile `WORKDIR` and CMD path to use `/app/main.py`.
-- Modified test files and `PYTHONPATH` to resolve module import errors during test runs.
-- Added `.env` parsing improvements: trims whitespace and supports inline comments.
-- Updated GitHub Actions CI to reflect new file structure and paths.
-- Updated Makefile to support builds from `./docker` folder.
-- Updated GitHub and Docker Hub documentation to match.
+- Fixed `ModuleNotFoundError: No module named 'app'` by updating imports.
+- Updated Dockerfile `WORKDIR` and `CMD` to use `/app/main.py`.
+- Improved `.env` parsing: trims whitespace and supports inline comments.
+- Updated GitHub Actions CI, Makefile, and documentation to match new structure.
+
+---
 
 ### [v1.2.0] - 2025-07-02
-- Added time window logic with `START_TIME` and `END_TIME` environment variables.
-- Refactored core logic into modular components: `scheduler.py`, `config.py`, `controller.py`, etc.
-- Added retry logic to API requests using `tenacity`.
-- Introduced automated testing via `pytest` and monkeypatch-based mocks.
-- Created a `Makefile` with targets for `build`, `test`, `push`, and `publish`.
-- Added GitHub Actions CI for push events.
+- Added support for time windows via `START_TIME` and `END_TIME`.
+- Refactored codebase into modular components (`scheduler.py`, `config.py`, etc).
+- Integrated `tenacity` for retry logic on API failures.
+- Introduced automated testing using `pytest` and `monkeypatch`.
+- Created a `Makefile` and added GitHub Actions CI workflow.
+
+---
 
 ### [v1.1.1] - 2025-07-01
-- Allowed setting timezone via the `TZ` environment variable.
-- Converted script to log server-local time correctly inside the container.
-- Changed default Docker image base to `python:3.11-slim`.
-- Published image to both Docker Hub and GitHub Container Registry (`ghcr.io`).
-- Updated `README.md` with improved Docker and Portainer deployment instructions.
+- Added support for container timezone via `TZ` env var.
+- Corrected time logging inside Docker.
+- Changed base image to `python:3.11-slim`.
+- Published Docker images to Docker Hub and GHCR.
+- Improved Docker and Portainer instructions in README.
+
+---
 
 ### [v1.0.0] - Initial Release
-- Core Govee plug control logic using Open-Meteo weather data.
-- Temperature and cloud cover thresholds trigger plug ON/OFF.
-- Supports Docker deployment and `.env` config.
-
+- Govee plug automation based on Open-Meteo weather data.
+- ON/OFF logic based on temperature and cloud cover thresholds.
+- Docker-compatible with `.env` configuration support.
 
 ---
 
