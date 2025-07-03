@@ -1,28 +1,38 @@
 # Makefile for Govee Smart Plug Controller
 
 # Configuration
-IMAGE_NAME=thejuice79/govee-smart-plug-controller
 VERSION=1.2.1
 PLATFORM=linux/amd64
 DOCKER_DIR=./docker
 DOCKERFILE=$(DOCKER_DIR)/Dockerfile
 
-# Build the Docker image using Dockerfile in ./docker/
+# Registry tags
+IMAGE_NAME_DOCKERHUB=thejuice79/govee-smart-plug-controller
+IMAGE_NAME_GHCR=ghcr.io/thejuice79/govee-smart-plug-controller
+
+# Build the Docker image
 build:
-	docker build --platform=$(PLATFORM) -f $(DOCKERFILE) -t $(IMAGE_NAME):$(VERSION) -t $(IMAGE_NAME):latest .
+	docker build --platform=$(PLATFORM) -f $(DOCKERFILE) -t $(IMAGE_NAME_DOCKERHUB):$(VERSION) -t $(IMAGE_NAME_DOCKERHUB):latest .
 
-# Push both tags to Docker Hub
+# Tag the image for GHCR
+tag-ghcr:
+	docker tag $(IMAGE_NAME_DOCKERHUB):$(VERSION) $(IMAGE_NAME_GHCR):$(VERSION)
+	docker tag $(IMAGE_NAME_DOCKERHUB):latest $(IMAGE_NAME_GHCR):latest
+
+# Push all tags to both registries
 push:
-	docker push $(IMAGE_NAME):$(VERSION)
-	docker push $(IMAGE_NAME):latest
+	docker push $(IMAGE_NAME_DOCKERHUB):$(VERSION)
+	docker push $(IMAGE_NAME_DOCKERHUB):latest
+	docker push $(IMAGE_NAME_GHCR):$(VERSION)
+	docker push $(IMAGE_NAME_GHCR):latest
 
-# Run all Python tests using local Python environment
+# Run all Python tests
 test:
 	PYTHONPATH=. pytest tests
 
-# Build and push Docker image
-publish: build push
+# Build and publish everything
+publish: build tag-ghcr push
 
-# Clean up dangling Docker images
+# Clean up
 clean:
 	docker image prune -f

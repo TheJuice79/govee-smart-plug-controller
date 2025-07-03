@@ -56,7 +56,11 @@ docker build -t govee-controller .
 ### Run
 
 ```bash
+# From GitHub Container Registry
 docker run --env-file .env --restart unless-stopped --name govee-controller ghcr.io/thejuice79/govee-smart-plug-controller:latest
+
+# Or from Docker Hub
+docker run --env-file .env --restart unless-stopped --name govee-controller thejuice79/govee-smart-plug-controller:latest
 ```
 
 ---
@@ -195,3 +199,57 @@ This project is licensed under the [Apache License 2.0](https://www.apache.org/l
 ## Author
 
 [TheJuice79](https://github.com/TheJuice79)
+
+---
+
+## 📋 Changelog
+
+### [v1.2.1] - 2025-07-03
+- Restructured project layout into `/app` package with `__init__.py`.
+- Fixed `ModuleNotFoundError: No module named 'app'` by ensuring relative imports align with package layout.
+- Updated Dockerfile `WORKDIR` and CMD path to use `/app/main.py`.
+- Modified test files and `PYTHONPATH` to resolve module import errors during test runs.
+- Added `.env` parsing improvements: trims whitespace and supports inline comments.
+- Updated GitHub Actions CI to reflect new file structure and paths.
+- Updated Makefile to support builds from `./docker` folder.
+- Updated GitHub and Docker Hub documentation to match.
+
+### [v1.2.0] - 2025-07-02
+- Added time window logic with `START_TIME` and `END_TIME` environment variables.
+- Refactored core logic into modular components: `scheduler.py`, `config.py`, `controller.py`, etc.
+- Added retry logic to API requests using `tenacity`.
+- Introduced automated testing via `pytest` and monkeypatch-based mocks.
+- Created a `Makefile` with targets for `build`, `test`, `push`, and `publish`.
+- Added GitHub Actions CI for push events.
+
+### [v1.1.1] - 2025-07-01
+- Allowed setting timezone via the `TZ` environment variable.
+- Converted script to log server-local time correctly inside the container.
+- Changed default Docker image base to `python:3.11-slim`.
+- Published image to both Docker Hub and GitHub Container Registry (`ghcr.io`).
+- Updated `README.md` with improved Docker and Portainer deployment instructions.
+
+### [v1.0.0] - Initial Release
+- Core Govee plug control logic using Open-Meteo weather data.
+- Temperature and cloud cover thresholds trigger plug ON/OFF.
+- Supports Docker deployment and `.env` config.
+
+
+---
+
+## 🛠 Makefile Support
+
+This project includes a `Makefile` to simplify common Docker operations:
+
+```bash
+make build    # Build Docker image
+make test     # Run Python tests
+make publish  # Build and push image to registry
+```
+
+---
+
+## 🔗 Additional Resources
+
+- [Releases](https://github.com/TheJuice79/govee-smart-plug-controller/releases)
+- [Issues](https://github.com/TheJuice79/govee-smart-plug-controller/issues)
