@@ -12,6 +12,6 @@ jobs:
         with:
           python-version: '3.9'
       - name: Install deps
-        run: pip install -r requirements.txt pytest
+        run: pip install -r docker/requirements.txt pytest
       - name: Run tests
-        run: PYTHONPATH=. pytest
+        run: PYTHONPATH=. pytest tests
