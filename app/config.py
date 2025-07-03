@@ -10,7 +10,15 @@ def get_config():
             print(f"Missing required environment variable: {var}")
             sys.exit(1)
 
-    return {
+    # Load config from environment variables
+    TEMP_UNIT = os.getenv("TEMP_UNIT", "fahrenheit").lower()
+
+    # Validate temperature unit
+    if TEMP_UNIT not in ("fahrenheit", "celsius"):
+        logger.error(f"Invalid TEMP_UNIT: {TEMP_UNIT}. Must be 'fahrenheit' or 'celsius'.")
+        sys.exit(1)
+
+    return { 
         "GOVEE_API_KEY": os.getenv("GOVEE_API_KEY"),
         "DEVICE_MAC": os.getenv("DEVICE_MAC"),
         "DEVICE_MODEL": os.getenv("DEVICE_MODEL"),
@@ -18,6 +26,7 @@ def get_config():
         "LON": float(os.getenv("LON")),
         "START_TIME": os.getenv("START_TIME", "00:00"),
         "END_TIME": os.getenv("END_TIME", "23:59"),
+        "TEMP_UNIT": TEMP_UNIT,
         "TEMP_THRESHOLD": float(os.getenv("TEMP_THRESHOLD", 75)),
         "CLOUD_THRESHOLD": float(os.getenv("CLOUD_THRESHOLD", 50)),
         "CHECK_INTERVAL": float(os.getenv("CHECK_INTERVAL", 15)) * 60,

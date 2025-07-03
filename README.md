@@ -37,6 +37,7 @@ LAT=39.8333
 LON=-98.5855
 START_TIME=00:00
 END_TIME=23:59
+TEMP_UNIT=fahrenheit
 TEMP_THRESHOLD=75
 CLOUD_THRESHOLD=50
 CHECK_INTERVAL=15
@@ -84,6 +85,7 @@ services:
       - LON=-98.5855
       - START_TIME=00:00
       - END_TIME=23:59
+      - TEMP_UNIT=fahrenheit
       - TEMP_THRESHOLD=75
       - CLOUD_THRESHOLD=50
       - CHECK_INTERVAL=15
@@ -169,6 +171,7 @@ This returns JSON with your registered devices and their details, including `dev
 | `LON`            | ✅       | Longitude of your location (e.g., `-88.2724`)                               |
 | `START_TIME`     | ❌       | The earliest time of day (in `HH:MM` 24-hour format) to allow plug control. |
 | `END_TIME  `     | ❌       | The latest time of day (in `HH:MM` 24-hour format) to allow plug control.   |
+| `TEMP_UNIT     ` | ❌       | Temperature unit for weather API: "fahrenheit" or "celsius" (default: `fahrenheit`) |
 | `TEMP_THRESHOLD` | ❌       | Temperature in °F above which the plug turns ON (default: `75`)             |
 | `CLOUD_THRESHOLD`| ❌       | Cloud cover percentage below which the plug turns ON (default: `50`)        |
 | `CHECK_INTERVAL` | ❌       | Time between weather checks, in minutes (default: `15`)                     |
