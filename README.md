@@ -224,6 +224,7 @@ This project is licensed under the [Apache License 2.0](https://www.apache.org/l
 ---
 
 ### [v1.2.1] - 2025-07-02
+#### Changed
 - Restructured project layout into `/app` package with `__init__.py`.
 - Fixed `ModuleNotFoundError: No module named 'app'` by updating imports.
 - Updated Dockerfile `WORKDIR` and `CMD` to use `/app/main.py`.
@@ -233,27 +234,37 @@ This project is licensed under the [Apache License 2.0](https://www.apache.org/l
 ---
 
 ### [v1.2.0] - 2025-07-02
-- Added support for time windows via `START_TIME` and `END_TIME`.
+#### Added
+- Support for time windows via `START_TIME` and `END_TIME`.
+- Retry logic for API calls using `tenacity`.
+- Automated testing with `pytest` and `monkeypatch`.
+- Makefile with build/test/push targets.
+- GitHub Actions CI workflow.
+
+#### Changed
 - Refactored codebase into modular components (`scheduler.py`, `config.py`, etc).
-- Integrated `tenacity` for retry logic on API failures.
-- Introduced automated testing using `pytest` and `monkeypatch`.
-- Created a `Makefile` and added GitHub Actions CI workflow.
 
 ---
 
 ### [v1.1.1] - 2025-07-01
-- Added support for container timezone via `TZ` env var.
-- Corrected time logging inside Docker.
-- Changed base image to `python:3.11-slim`.
-- Published Docker images to Docker Hub and GHCR.
-- Improved Docker and Portainer instructions in README.
+#### Added
+- Timezone support via `TZ` env var.
+- Docker images published to GHCR and Docker Hub.
+
+#### Changed
+- Time logging corrected inside Docker.
+- Base image switched to `python:3.11-slim`.
+
+#### Fixed
+- Improved README instructions for Docker and Portainer deployments.
 
 ---
 
-### [v1.0.0] - Initial Release
-- Govee plug automation based on Open-Meteo weather data.
-- ON/OFF logic based on temperature and cloud cover thresholds.
-- Docker-compatible with `.env` configuration support.
+### [v1.0.0] - 2025-07-01
+#### Added
+- Initial release with Govee plug control logic.
+- Weather-based ON/OFF logic using Open-Meteo API.
+- Docker support with `.env` configuration.
 
 ---
 
