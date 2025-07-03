@@ -9,7 +9,13 @@ logger = logging.getLogger(__name__)
 
 def fetch_weather(lat, lon):
     try:
-        url = f"https://api.open-meteo.com/v1/forecast?latitude={lat}&longitude={lon}&current=temperature_2m,cloudcover&timezone=auto"
+        url = (
+            f"https://api.open-meteo.com/v1/forecast"
+            f"?latitude={lat}&longitude={lon}"
+            f"&current=temperature_2m,cloudcover"
+            f"&temperature_unit=fahrenheit"
+            f"&timezone=auto"
+        )
         response = requests.get(url)
         response.raise_for_status()
         data = response.json()["current"]
