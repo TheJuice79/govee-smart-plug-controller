@@ -9,7 +9,7 @@ DOCKERFILE=$(DOCKER_DIR)/Dockerfile
 
 # Build the Docker image using Dockerfile in ./docker/
 build:
-	docker build --platform=$(PLATFORM) -f $(DOCKERFILE) -t $(IMAGE_NAME):$(VERSION) -t $(IMAGE_NAME):latest $(DOCKER_DIR)
+	docker build --platform=$(PLATFORM) -f $(DOCKERFILE) -t $(IMAGE_NAME):$(VERSION) -t $(IMAGE_NAME):latest .
 
 # Push both tags to Docker Hub
 push:
