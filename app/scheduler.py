@@ -7,13 +7,13 @@ import requests
 
 logger = logging.getLogger(__name__)
 
-def fetch_weather(lat, lon):
+def fetch_weather(lat, lon, temp_unit):
     try:
         url = (
             f"https://api.open-meteo.com/v1/forecast"
             f"?latitude={lat}&longitude={lon}"
             f"&current=temperature_2m,cloudcover"
-            f"&temperature_unit=fahrenheit"
+            f"&temperature_unit={temp_unit}"
             f"&timezone=auto"
         )
         response = requests.get(url)
@@ -29,7 +29,7 @@ def run_loop():
     while True:
         now_within_time = is_within_time_window(config["START_TIME"], config["END_TIME"])
         if now_within_time:
-            temp, cloud = fetch_weather(config["LAT"], config["LON"])
+            temp, cloud = fetch_weather(config["LAT"], config["LON"]), config["TEMP_UNIT"]
             if temp is None:
                 time.sleep(config["CHECK_INTERVAL"])
                 continue
