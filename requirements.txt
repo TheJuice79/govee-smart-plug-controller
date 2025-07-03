@@ -1,2 +1,3 @@
 requests
 python-dotenv
+tenacity>=8.0
