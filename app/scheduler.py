@@ -1,8 +1,8 @@
 import time
 import logging
-from config import get_config
-from time_helpers import is_within_time_window
-from controller import turn_on_plug, turn_off_plug
+from app.config import get_config
+from app.time_helpers import is_within_time_window
+from app.controller import turn_on_plug, turn_off_plug
 import requests
 from datetime import datetime, timedelta
 import time
