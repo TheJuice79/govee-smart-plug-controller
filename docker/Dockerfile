@@ -1,27 +1,35 @@
-# Use an official Python base image
-FROM python:3.11.9-slim-bookworm
+# Use a minimal official Python image as the base
+FROM python:3.11-slim
 
-# Set environment variable for timezone (can be overridden via Docker Compose)
-ENV TZ=UTC
+# --------------------------------------------
+# 📌 OCI-compliant image metadata labels
+# --------------------------------------------
+LABEL maintainer="TheJuice79 <you@example.com>"
+LABEL org.opencontainers.image.title="Govee Smart Plug Controller"
+LABEL org.opencontainers.image.description="Automates a Govee smart plug based on weather and time window conditions."
+LABEL org.opencontainers.image.version="1.1.1"
+LABEL org.opencontainers.image.source="https://github.com/TheJuice79/govee-smart-plug-controller"
+LABEL org.opencontainers.image.documentation="https://github.com/TheJuice79/govee-smart-plug-controller"
+LABEL org.opencontainers.image.licenses="MIT"
 
-# Set working directory
+# --------------------------------------------
+# 📂 Set working directory inside container
+# --------------------------------------------
 WORKDIR /app
 
-# Copy requirements first to leverage Docker caching
+# --------------------------------------------
+# 📄 Copy requirements file and install dependencies
+# --------------------------------------------
 COPY requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt
 
-# Install tzdata and Python dependencies
-RUN apt-get update && \
-    apt-get install -y tzdata && \
-    pip install --no-cache-dir -r requirements.txt && \
-    apt-get clean && \
-    rm -rf /var/lib/apt/lists/*
+# --------------------------------------------
+# 📁 Copy all source files into the container
+# --------------------------------------------
+COPY . .
 
-# Copy remaining app files
-COPY controller.py .
-
-# Configure the timezone
-RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
-
-# Run the script
-CMD ["python", "controller.py"]
+# --------------------------------------------
+# 🏁 Default command to run when the container starts
+# You can change 'main.py' to your actual entry point
+# --------------------------------------------
+CMD ["python", "main.py"]
