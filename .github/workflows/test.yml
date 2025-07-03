@@ -7,11 +7,17 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
           python-version: '3.9'
+
       - name: Install deps
         run: pip install -r docker/requirements.txt pytest
+
+      - name: Copy .env.test for test config
+        run: cp tests/.env.test .env
+
       - name: Run tests
-        run: PYTHONPATH=. pytest tests
+        run: pytest tests
