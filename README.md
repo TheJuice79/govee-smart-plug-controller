@@ -208,6 +208,18 @@ This project is licensed under the [Apache License 2.0](https://www.apache.org/l
 
 ## 📋 Changelog
 
+## [1.3.2] - 2025-07-03
+### Fixed
+- Docker container startup error: `main.py` not found
+- Updated `CMD` path in Dockerfile to correctly reference `app/main.py`
+- Ensured consistent import handling using `PYTHONPATH=/app`
+
+### Notes
+- No functional changes to application logic
+- Patch release to support Docker and CI compatibility
+
+---
+
 ## [1.3.1] - 2025-07-03
 ### Added
 - Full `pytest` test coverage for `scheduler.py`, `config.py`, and `main.py`

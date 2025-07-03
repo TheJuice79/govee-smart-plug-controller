@@ -8,11 +8,11 @@ WORKDIR /app
 COPY docker/requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Copy all project source files from root
-COPY app/ /app/
+# Copy all project source files
+COPY . /app/
 
 # Set Python path so 'app' module is found
-ENV PYTHONPATH="/app"
+ENV PYTHONPATH=/app
 
 # Run the application
-CMD ["python", "main.py"]
+CMD ["python", "app/main.py"]
