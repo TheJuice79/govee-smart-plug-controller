@@ -208,6 +208,20 @@ This project is licensed under the [Apache License 2.0](https://www.apache.org/l
 
 ## 📋 Changelog
 
+## [1.3.1] - 2025-07-03
+### Added
+- Full `pytest` test coverage for `scheduler.py`, `config.py`, and `main.py`
+- New tests simulate time-based behavior, signal handling, and config validation
+- Docker image updated to include latest stable code and fixes
+
+### Fixed
+- Corrected `fetch_weather()` call to include `temp_unit` (previously caused runtime TypeError)
+- Resolved import issues by switching to absolute imports for improved compatibility with test runners
+
+### Changed
+- Introduced `sleep_until_next_start()` for smarter scheduling when outside `START_TIME`/`END_TIME`
+- Internal logic in `run_loop()` now avoids unnecessary API calls during inactive periods
+
 ### [v1.3.0] - 2025-07-03
 #### Added
 - Support for `TEMP_UNIT` environment variable to choose between `"fahrenheit"` or `"celsius"` when fetching weather data.
