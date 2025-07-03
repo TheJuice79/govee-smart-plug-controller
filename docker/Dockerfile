@@ -11,5 +11,8 @@ RUN pip install --no-cache-dir -r requirements.txt
 # Copy all project source files from root
 COPY app/ /app/
 
+# Set Python path so 'app' module is found
+ENV PYTHONPATH="/app"
+
 # Run the application
 CMD ["python", "main.py"]

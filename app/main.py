@@ -1,7 +1,7 @@
 import signal
 import sys
 import logging
-from app.scheduler import run_loop
+from scheduler import run_loop
 
 logging.basicConfig(
     format='%(asctime)s - %(levelname)s - %(message)s',
