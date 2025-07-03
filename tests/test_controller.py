@@ -1,5 +1,5 @@
 import pytest
-from controller import send_command
+from app.controller import send_command
 
 def test_send_command_mocked(monkeypatch):
     class MockResponse:
@@ -8,7 +8,7 @@ def test_send_command_mocked(monkeypatch):
     def mock_put(*args, **kwargs):
         return MockResponse()
 
-    monkeypatch.setattr("controller.requests.put", mock_put)
+    monkeypatch.setattr("app.controller.requests.put", mock_put)
 
     config = {
         "DEVICE_MAC": "mock-mac",

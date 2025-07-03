@@ -2,7 +2,7 @@
 
 # Configuration
 IMAGE_NAME=thejuice79/govee-smart-plug-controller
-VERSION=1.2.0
+VERSION=1.2.1
 PLATFORM=linux/amd64
 DOCKER_DIR=./docker
 DOCKERFILE=$(DOCKER_DIR)/Dockerfile
