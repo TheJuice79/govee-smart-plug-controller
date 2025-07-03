@@ -9,7 +9,7 @@ COPY docker/requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
 # Copy all project source files from root
-COPY . .
+COPY app/ /app/
 
 # Run the application
 CMD ["python", "main.py"]
