@@ -24,6 +24,11 @@ class Controller:
     )
     def send_command(self, command):
         command = command.lower()
+
+        if command not in ("on", "off"):
+            logger.warning(f"Ignoring invalid command: '{command}'")
+            return  # Exit early without doing anything
+
         if self.current_state == command:
             logger.info(f"Plug already {command}. Skipping API call.")
             return
@@ -39,7 +44,11 @@ class Controller:
             "cmd": {"name": "turn", "value": command}
         }
 
-        response = requests.put(url, headers=headers, json=data)
-        response.raise_for_status()
-        logger.info(f"Turned {command} the plug successfully.")
-        self.current_state = command  # Cache updated state
+        try:
+            response = requests.put(url, headers=headers, json=data)
+            response.raise_for_status()
+            logger.info(f"Turned {command} the plug successfully.")
+            self.current_state = command
+        except RequestException as e:
+            logger.error(f"Failed to send '{command}' command: {e}")
+
