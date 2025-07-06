@@ -100,11 +100,19 @@ def test_initial_state_none_transitions_on(controller_with_mock):
     assert controller.current_state == "on"
     assert call_log == ["on"]
 
-import pytest
-
 @pytest.mark.parametrize("cmd", ["on", "ON", "On"])
 def test_case_insensitivity(cmd, controller_with_mock):
     controller, call_log = controller_with_mock
     controller.send_command(cmd)
     assert controller.current_state == "on"
     assert call_log == ["on"]
+
+def test_class_method_call_raises_error():
+    config = {
+        "DEVICE_MAC": "mock-mac",
+        "DEVICE_MODEL": "mock-model",
+        "GOVEE_API_KEY": "mock-key"
+    }
+
+    with pytest.raises(AttributeError):
+        Controller.turn_off_plug(config)  # ❌ Misuse: passing dict to instance method

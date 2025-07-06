@@ -43,6 +43,8 @@ def sleep_until_next_start(start_time_str):
 
 def run_loop():
     config = get_config()
+    controller = Controller(config)  # ✅ instantiate the class
+
     while True:
         now_within_time = is_within_time_window(config["START_TIME"], config["END_TIME"])
         if now_within_time:
@@ -54,9 +56,9 @@ def run_loop():
             logger.info(f"Weather: {temp}°F, {cloud}% cloud cover")
 
             if temp >= config["TEMP_THRESHOLD"] and cloud <= config["CLOUD_THRESHOLD"]:
-                Controller.turn_on_plug(config)
+                controller.turn_on_plug()
             else:
-                Controller.turn_off_plug(config)
+                controller.turn_off_plug()
 
             time.sleep(config["CHECK_INTERVAL"])
         else:
