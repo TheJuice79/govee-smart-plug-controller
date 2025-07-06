@@ -1,5 +1,5 @@
 import pytest
-from app.controller import send_command
+from app.controller import Controller
 
 def test_send_command_mocked(monkeypatch):
     class MockResponse:
@@ -16,8 +16,10 @@ def test_send_command_mocked(monkeypatch):
         "GOVEE_API_KEY": "mock-key"
     }
 
+    controller = Controller(config)  # ✅ Create instance
+
     try:
-        send_command(config, True)
-        send_command(config, False)
+        controller.send_command("on")   # ✅ Call instance method
+        controller.send_command("off")
     except Exception:
         pytest.fail("send_command raised unexpectedly")

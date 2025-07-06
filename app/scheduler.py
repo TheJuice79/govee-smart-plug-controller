@@ -2,7 +2,7 @@ import time
 import logging
 from app.config import get_config
 from app.time_helpers import is_within_time_window
-from app.controller import turn_on_plug, turn_off_plug
+from app.controller import Controller
 import requests
 from datetime import datetime, timedelta
 import time
@@ -54,9 +54,9 @@ def run_loop():
             logger.info(f"Weather: {temp}°F, {cloud}% cloud cover")
 
             if temp >= config["TEMP_THRESHOLD"] and cloud <= config["CLOUD_THRESHOLD"]:
-                turn_on_plug(config)
+                Controller.turn_on_plug(config)
             else:
-                turn_off_plug(config)
+                Controller.turn_off_plug(config)
 
             time.sleep(config["CHECK_INTERVAL"])
         else:
