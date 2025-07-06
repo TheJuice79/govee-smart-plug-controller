@@ -187,6 +187,14 @@ ghcr.io/thejuice79/govee-smart-plug-controller:latest
 
 ## 📋 Changelog
 
+### [1.4.1] - 2025-07-06
+#### Fixed
+- Added defensive check to ensure `send_command()` and other methods are only called on Controller instances
+- Prevents misleading errors when class methods are mistakenly used without instantiation
+- Updated test suite to explicitly validate this misuse case
+
+---
+
 ### [1.4.0] - 2025-07-06
 #### Added
 - `Controller` class with cached plug state
