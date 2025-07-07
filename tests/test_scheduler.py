@@ -1,5 +1,6 @@
 import pytest
 import requests
+from unittest.mock import MagicMock, patch
 from datetime import datetime
 from app.scheduler import fetch_weather, sleep_until_next_start, run_loop
 
@@ -66,18 +67,32 @@ def test_fetch_weather_failure(monkeypatch, caplog):
 # --- run_loop (partial test) --------------------------------------------------
 
 def test_run_loop_outside_time(monkeypatch):
-    # mock get_config
+    # Mock get_config to return a valid config
     monkeypatch.setattr("app.scheduler.get_config", lambda: {
         "START_TIME": "09:00",
         "END_TIME": "17:00",
         "CHECK_INTERVAL": 1,
+        "LAT": 0,
+        "LON": 0,
+        "TEMP_UNIT": "fahrenheit",
+        "TEMP_THRESHOLD": 75,
+        "CLOUD_THRESHOLD": 50,
     })
 
-    # mock is_within_time_window to always return False
+    # Always outside time window
     monkeypatch.setattr("app.scheduler.is_within_time_window", lambda s, e: False)
 
-    # patch sleep_until_next_start to exit after first call
+    # Cause sleep_until_next_start to raise SystemExit to break the loop
     monkeypatch.setattr("app.scheduler.sleep_until_next_start", lambda s: (_ for _ in ()).throw(SystemExit))
 
-    with pytest.raises(SystemExit):
-        run_loop()
+    # Patch Controller and its methods
+    with patch("app.scheduler.Controller") as MockController:
+        mock_controller = MagicMock()
+        MockController.return_value = mock_controller
+
+        with pytest.raises(SystemExit):
+            run_loop()
+
+        # Assert turn_off_plug was called when outside time window
+        mock_controller.turn_off_plug.assert_called_once()
+

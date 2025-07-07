@@ -4,6 +4,13 @@ All notable changes for each version are listed below.
 
 ---
 
+## [1.4.2] – 2025‑07‑07
+### 🛠 Bug Fixes
+- Ensured `turn_off_plug()` is called when outside the configured `START_TIME`–`END_TIME` window to prevent pump from staying on.
+- Updated `test_run_loop_outside_time` to mock `Controller` and assert that `turn_off_plug()` is invoked correctly during off-hours.
+
+---
+
 ## [1.4.1] – 2025‑07‑06
 ### 🛠 Bug Fixes
 - Added a defensive check to ensure instance methods like `send_command()` and `turn_off_plug()` are **only called on a `Controller` instance**.
