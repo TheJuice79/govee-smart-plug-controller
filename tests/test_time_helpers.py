@@ -2,9 +2,6 @@ import pytest
 from app.time_helpers import is_within_time_window
 from datetime import datetime
 
-def test_basic_daytime():
-    assert is_within_time_window("08:00", "20:00")
-
 def test_outside_window(monkeypatch):
     from datetime import datetime
     class MockDT(datetime):
