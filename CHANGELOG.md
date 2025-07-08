@@ -4,6 +4,15 @@ All notable changes for each version are listed below.
 
 ---
 
+## [1.5.0] – 2025‑07‑08
+### ✨ New Features
+- Added support for fallback to Open-Meteo API when `WEATHERAPI_KEY` is not provided
+- Updated `fetch_weather()` to switch dynamically between WeatherAPI and Open-Meteo
+- Maintains full backward compatibility with earlier `.env` files
+- Extended unit tests to verify both WeatherAPI and Open-Meteo behavior
+
+---
+
 ## [1.4.3] – 2025‑07‑08
 ### 🔄 Changed
 - Replaced Open-Meteo API with WeatherAPI for better real-time temperature and cloud accuracy
