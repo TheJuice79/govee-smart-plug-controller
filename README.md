@@ -6,7 +6,7 @@ A Python script and Docker container that automatically controls a Govee smart p
 
 ## ✅ Features
 
-- Pulls current weather data from the Open-Meteo API
+- Pulls current weather data from the [WeatherAPI](https://www.weatherapi.com/)
 - Automatically turns Govee smart plug ON/OFF based on temperature and cloud cover thresholds
 - Avoids redundant API calls by caching the plug state
 - Respects configurable time window (`START_TIME` to `END_TIME`)
@@ -42,6 +42,7 @@ TEMP_THRESHOLD=75
 CLOUD_THRESHOLD=50
 CHECK_INTERVAL=15
 TZ=America/Chicago
+WEATHERAPI_KEY=your_weatherapi_key
 ```
 
 ---
@@ -82,6 +83,7 @@ services:
       - GOVEE_API_KEY=your_govee_api_key
       - DEVICE_MAC=your_device_mac
       - DEVICE_MODEL=your_device_model
+      - WEATHERAPI_KEY=your_weatherapi_key
       - LAT=39.8333
       - LON=-98.5855
       - START_TIME=09:00
@@ -109,6 +111,15 @@ docker compose up -d
 3. Navigate to the **API Keys** section
 4. Create a new API key (e.g., "Pool Heater Controller")
 5. Copy and paste it into your `.env` file
+
+---
+
+## 🌦 How to Get a WeatherAPI Key
+
+1. Sign up at [https://www.weatherapi.com](https://www.weatherapi.com)
+2. Go to your [API keys dashboard](https://www.weatherapi.com/my/)
+3. Copy your free key (e.g., `abcd1234efgh5678`)
+4. Add it to your `.env` file as `WEATHERAPI_KEY=your_key_here`
 
 ---
 
@@ -149,20 +160,21 @@ Tests include:
 
 ## 📋 Environment Variables
 
-| Variable         | Required | Description                                                                 |
-|------------------|----------|-----------------------------------------------------------------------------|
-| `GOVEE_API_KEY`  | ✅       | Your Govee API key from [developer.govee.com](https://developer.govee.com/) |
-| `DEVICE_MAC`     | ✅       | MAC address of the Govee plug (e.g., `AA:BB:CC:DD:EE:FF`)                  |
-| `DEVICE_MODEL`   | ✅       | Govee plug model number (e.g., `H5083`)                                    |
-| `LAT`            | ✅       | Latitude of your location                                                  |
-| `LON`            | ✅       | Longitude of your location                                                 |
-| `START_TIME`     | ❌       | Time of day to begin plug control (e.g., `09:00`)                          |
-| `END_TIME`       | ❌       | Time of day to stop plug control (e.g., `18:00`)                           |
-| `TEMP_UNIT`      | ❌       | `"fahrenheit"` or `"celsius"` (default: `fahrenheit`)                      |
-| `TEMP_THRESHOLD` | ❌       | Temperature above which the plug turns ON (default: `75`)                  |
-| `CLOUD_THRESHOLD`| ❌       | Cloud cover below which the plug turns ON (default: `50`)                  |
-| `CHECK_INTERVAL` | ❌       | Minutes between weather checks (default: `15`)                             |
-| `TZ`             | ❌       | Timezone (e.g., `America/Chicago`)                                         |
+| Variable          | Required | Description                                                                 |
+|-------------------|----------|-----------------------------------------------------------------------------|
+| `GOVEE_API_KEY`   | ✅       | Your Govee API key from [developer.govee.com](https://developer.govee.com/) |
+| `DEVICE_MAC`      | ✅       | MAC address of the Govee plug (e.g., `AA:BB:CC:DD:EE:FF`)                   |
+| `DEVICE_MODEL`    | ✅       | Govee plug model number (e.g., `H5083`)                                     |
+| `WEATHERAPI_KEY`  | ✅       | Your API key from [weatherapi.com](https://www.weatherapi.com/)             |
+| `LAT`             | ✅       | Latitude of your location                                                   |
+| `LON`             | ✅       | Longitude of your location                                                  |
+| `START_TIME`      | ❌       | Time of day to begin plug control (e.g., `09:00`)                           |
+| `END_TIME`        | ❌       | Time of day to stop plug control (e.g., `18:00`)                            |
+| `TEMP_UNIT`       | ❌       | `"fahrenheit"` or `"celsius"` (default: `fahrenheit`)                       |
+| `TEMP_THRESHOLD`  | ❌       | Temperature above which the plug turns ON (default: `75`)                   |
+| `CLOUD_THRESHOLD` | ❌       | Cloud cover below which the plug turns ON (default: `50`)                   |
+| `CHECK_INTERVAL`  | ❌       | Minutes between weather checks (default: `15`)                              |
+| `TZ`              | ❌       | Timezone (e.g., `America/Chicago`)                                          |
 
 ---
 
@@ -187,11 +199,12 @@ ghcr.io/thejuice79/govee-smart-plug-controller:latest
 
 ## 📋 Changelog
 
-### [1.4.1] - 2025-07-06
-#### Fixed
-- Added defensive check to ensure `send_command()` and other methods are only called on Controller instances
-- Prevents misleading errors when class methods are mistakenly used without instantiation
-- Updated test suite to explicitly validate this misuse case
+### [1.4.3] – 2025‑07‑08
+#### 🔄 Changed
+- Replaced Open-Meteo API with WeatherAPI for improved real-time accuracy
+- Updated `fetch_weather()` to support WeatherAPI cloud and temperature fields
+- Adjusted `.env`, README, and environment variable documentation
+- Updated tests to reflect new API format
 
 ---
 

@@ -9,22 +9,40 @@ import time
 
 logger = logging.getLogger(__name__)
 
-def fetch_weather(lat, lon, temp_unit):
+def fetch_weather(lat, lon, temp_unit, weatherapi):
     try:
+        # Ensure valid TEMP_UNIT for WeatherAPI ('f' or 'c')
+        if temp_unit.lower() not in ("fahrenheit", "celsius"):
+            raise ValueError("Invalid temp_unit. Use 'fahrenheit' or 'celsius'.")
+
+        # WeatherAPI uses 'f' or 'c' in query param
+        is_fahrenheit = temp_unit.lower() == "fahrenheit"
+        query_unit = "yes" if is_fahrenheit else "no"
+
+        api_key = weatherapi
+        if not api_key:
+            raise EnvironmentError("Missing WEATHERAPI_KEY environment variable.")
+
         url = (
-            f"https://api.open-meteo.com/v1/forecast"
-            f"?latitude={lat}&longitude={lon}"
-            f"&current=temperature_2m,cloudcover"
-            f"&temperature_unit={temp_unit}"
-            f"&timezone=auto"
+            f"https://api.weatherapi.com/v1/current.json"
+            f"?key={api_key}"
+            f"&q={lat},{lon}"
+            f"&aqi=no"
         )
+
         response = requests.get(url)
         response.raise_for_status()
         data = response.json()["current"]
-        return data["temperature_2m"], data["cloudcover"]
+
+        temperature = data["temp_f"] if is_fahrenheit else data["temp_c"]
+        cloud = data["cloud"]  # Percentage (0–100)
+
+        return temperature, cloud
+
     except Exception as e:
         logger.error(f"Failed to fetch weather: {e}")
         return None, None
+
 
 def sleep_until_next_start(start_time_str):
     # Compute sleep duration until next START_TIME
@@ -48,7 +66,7 @@ def run_loop():
     while True:
         now_within_time = is_within_time_window(config["START_TIME"], config["END_TIME"])
         if now_within_time:
-            temp, cloud = fetch_weather(config["LAT"], config["LON"], config["TEMP_UNIT"])
+            temp, cloud = fetch_weather(config["LAT"], config["LON"], config["TEMP_UNIT"], config["WEATHERAPI_KEY"])
             if temp is None:
                 time.sleep(config["CHECK_INTERVAL"])
                 continue

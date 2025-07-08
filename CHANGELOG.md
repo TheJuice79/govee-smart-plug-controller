@@ -4,6 +4,15 @@ All notable changes for each version are listed below.
 
 ---
 
+## [1.4.3] – 2025‑07‑08
+### 🔄 Changed
+- Replaced Open-Meteo API with WeatherAPI for better real-time temperature and cloud accuracy
+- Updated `fetch_weather()` to support WeatherAPI's format
+- Modified `.env` example and README with `WEATHERAPI_KEY`
+- Adjusted tests and mocking to reflect WeatherAPI response format
+
+---
+
 ## [1.4.2] – 2025‑07‑07
 ### 🛠 Bug Fixes
 - Ensured `turn_off_plug()` is called when outside the configured `START_TIME`–`END_TIME` window to prevent pump from staying on.
