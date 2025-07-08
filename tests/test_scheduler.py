@@ -44,23 +44,31 @@ def test_fetch_weather_success(monkeypatch):
         def json(self):
             return {
                 "current": {
-                    "temperature_2m": 77.5,
-                    "cloudcover": 42
+                    "temp_f": 82.5,
+                    "temp_c": 28.1,
+                    "cloud": 88
                 }
             }
 
     monkeypatch.setattr("app.scheduler.requests.get", lambda url: FakeResponse())
 
-    temp, cloud = fetch_weather(44.2, -88.3, "fahrenheit")
-    assert temp == 77.5
-    assert cloud == 42
+    temp, cloud = fetch_weather(44.2, -88.3, "fahrenheit", "fake-key")
+    assert temp == 82.5
+    assert cloud == 88
+
+    temp, cloud = fetch_weather(44.2, -88.3, "celsius", "fake-key")
+    assert temp == 28.1
+    assert cloud == 88
 
 def test_fetch_weather_failure(monkeypatch, caplog):
+    monkeypatch.setenv("WEATHERAPI_KEY", "fake-key")
+
     def fake_get(url):
         raise requests.exceptions.RequestException("Fake error")
+
     monkeypatch.setattr("app.scheduler.requests.get", fake_get)
 
-    temp, cloud = fetch_weather(0, 0, "fahrenheit")
+    temp, cloud = fetch_weather(0, 0, "fahrenheit", "fake-key")
     assert temp is None and cloud is None
     assert "Failed to fetch weather" in caplog.text
 

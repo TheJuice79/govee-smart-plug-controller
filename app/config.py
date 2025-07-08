@@ -22,6 +22,7 @@ def get_config():
         "GOVEE_API_KEY": os.getenv("GOVEE_API_KEY"),
         "DEVICE_MAC": os.getenv("DEVICE_MAC"),
         "DEVICE_MODEL": os.getenv("DEVICE_MODEL"),
+        "WEATHERAPI_KEY": os.getenv("WEATHERAPI_KEY"),        
         "LAT": float(os.getenv("LAT")),
         "LON": float(os.getenv("LON")),
         "START_TIME": os.getenv("START_TIME", "00:00"),
