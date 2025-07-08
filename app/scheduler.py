@@ -1,90 +1,39 @@
 import time
 import logging
+from datetime import datetime, timedelta
+
 from app.config import get_config
 from app.time_helpers import is_within_time_window
 from app.controller import Controller
-import requests
-from datetime import datetime, timedelta
-import time
+from app.weather import fetch_weather  # ✅ Now imported from weather.py
 
 logger = logging.getLogger(__name__)
 
-
-def fetch_weather(lat, lon, temp_unit, weatherapi):
-    try:
-        if temp_unit.lower() not in ("fahrenheit", "celsius"):
-            raise ValueError("Invalid temp_unit. Use 'fahrenheit' or 'celsius'.")
-
-        is_fahrenheit = temp_unit.lower() == "fahrenheit"
-
-        if weatherapi:
-            # --- WeatherAPI branch ---
-            url = (
-                f"https://api.weatherapi.com/v1/current.json"
-                f"?key={weatherapi}"
-                f"&q={lat},{lon}"
-                f"&aqi=no"
-            )
-
-            response = requests.get(url)
-            response.raise_for_status()
-            data = response.json()["current"]
-
-            temperature = data["temp_f"] if is_fahrenheit else data["temp_c"]
-            cloud = data["cloud"]
-
-        else:
-            # --- Open-Meteo fallback ---
-            unit_param = "fahrenheit" if is_fahrenheit else "celsius"
-            url = (
-                f"https://api.open-meteo.com/v1/forecast"
-                f"?latitude={lat}&longitude={lon}"
-                f"&current=temperature_2m,cloudcover"
-                f"&temperature_unit={unit_param}"
-                f"&timezone=auto"
-            )
-
-            response = requests.get(url)
-            response.raise_for_status()
-            data = response.json()["current"]
-
-            temperature = data["temperature_2m"]
-            cloud = data["cloudcover"]
-
-        return temperature, cloud
-
-    except Exception as e:
-        logger.error(f"Failed to fetch weather: {e}")
-        return None, None
-
 def sleep_until_next_start(start_time_str):
-    # Compute sleep duration until next START_TIME
     now = datetime.now()
     start_time = datetime.strptime(start_time_str, "%H:%M").time()
     start_datetime = datetime.combine(now.date(), start_time)
 
     if now.time() >= start_time:
-        # It's past today's START_TIME, so wait until tomorrow's
         start_datetime += timedelta(days=1)
 
     sleep_seconds = (start_datetime - now).total_seconds()
     logger.info(f"Outside time window. Sleeping until next START_TIME at {start_datetime.strftime('%Y-%m-%d %H:%M')}")
     time.sleep(sleep_seconds)
-    return int(sleep_seconds)  # for test visibility
+    return int(sleep_seconds)
 
 def run_loop():
     config = get_config()
-    controller = Controller(config)  # ✅ instantiate the class
+    controller = Controller(config)
 
     while True:
-        now_within_time = is_within_time_window(config["START_TIME"], config["END_TIME"])
-        if now_within_time:
-            temp, cloud = fetch_weather(config["LAT"], config["LON"], config["TEMP_UNIT"], config["WEATHERAPI_KEY"])
+        if is_within_time_window(config["START_TIME"], config["END_TIME"]):
+            temp, cloud = fetch_weather(config["LAT"], config["LON"], config["TEMP_UNIT"], config.get("WEATHERAPI_KEY"))
             if temp is None:
                 time.sleep(config["CHECK_INTERVAL"])
                 continue
 
-            logger.info(f"Weather: {temp}°F, {cloud}% cloud cover")
+            logger.info(f"Weather: {temp}°, {cloud}% cloud cover")
 
             if temp >= config["TEMP_THRESHOLD"] and cloud <= config["CLOUD_THRESHOLD"]:
                 controller.turn_on_plug()

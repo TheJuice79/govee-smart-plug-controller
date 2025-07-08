@@ -205,12 +205,14 @@ ghcr.io/thejuice79/govee-smart-plug-controller:latest
 
 ## 📋 Changelog
 
-## [1.5.0] – 2025‑07‑08
-### ✨ New Features
-- Added support for fallback to Open-Meteo API when `WEATHERAPI_KEY` is not provided
-- Updated `fetch_weather()` to switch dynamically between WeatherAPI and Open-Meteo
-- Maintains full backward compatibility with earlier `.env` files
-- Extended unit tests to verify both WeatherAPI and Open-Meteo behavior
+## [1.5.1] – 2025‑07‑08
+### 🧼 Internal Refactor
+- Split `fetch_weather()` into a new `weather.py` module
+- Moved scheduling logic (`run_loop`, `sleep_until_next_start`) to `scheduler.py`
+- Updated test suite:
+  - `test_scheduler.py` for scheduling logic
+  - `test_weather.py` for weather API logic
+- No changes to external behavior or config required
 
 ---
 
