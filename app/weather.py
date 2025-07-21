@@ -18,13 +18,17 @@ def fetch_weather(lat, lon, temp_unit, weatherapi):
                 f"&q={lat},{lon}"
                 f"&aqi=no"
             )
+            try:
+                response = requests.get(url)
+                response.raise_for_status()
+                data = response.json()["current"]
 
-            response = requests.get(url)
-            response.raise_for_status()
-            data = response.json()["current"]
+                temperature = data["temp_f"] if is_fahrenheit else data["temp_c"]
+                cloud = data["cloud"]
 
-            temperature = data["temp_f"] if is_fahrenheit else data["temp_c"]
-            cloud = data["cloud"]
+            except:
+                logger.warning("WeatherAPI request failed, falling back to Open-Meteo.")
+                fetch_weather(lat, lon, temp_unit, None)  # Retry without WeatherAPI
 
         else:
             # --- Open-Meteo fallback ---

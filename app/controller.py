@@ -10,10 +10,17 @@ class Controller:
         self.config = config
         self.current_state = None  # "on", "off", or None
 
-    def turn_on_plug(self):
+    def turn_on_plug(self, force=False):
+        if force:
+            logger.info("Force turning on the plug.")
+            self.current_state = None
         self.send_command("on")
 
-    def turn_off_plug(self):
+    def turn_off_plug(self, force=False):
+        if force:
+            logger.info("Force turning off the plug.")
+            self.current_state = None
+            
         self.send_command("off")
 
     @retry(

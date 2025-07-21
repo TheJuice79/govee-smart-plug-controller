@@ -42,5 +42,5 @@ def run_loop():
 
             time.sleep(config["CHECK_INTERVAL"])
         else:
-            controller.turn_off_plug()
+            controller.turn_off_plug(True)
             sleep_until_next_start(config["START_TIME"])
