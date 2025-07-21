@@ -1,7 +1,7 @@
 # Makefile for Govee Smart Plug Controller
 
 # Configuration
-VERSION=1.5.1
+VERSION=1.5.2
 PLATFORM=linux/amd64
 DOCKER_DIR=./docker
 DOCKERFILE=$(DOCKER_DIR)/Dockerfile
