@@ -205,14 +205,19 @@ ghcr.io/thejuice79/govee-smart-plug-controller:latest
 
 ## 📋 Changelog
 
-## [1.5.1] – 2025‑07‑08
-### 🧼 Internal Refactor
-- Split `fetch_weather()` into a new `weather.py` module
-- Moved scheduling logic (`run_loop`, `sleep_until_next_start`) to `scheduler.py`
-- Updated test suite:
-  - `test_scheduler.py` for scheduling logic
-  - `test_weather.py` for weather API logic
-- No changes to external behavior or config required
+## [v1.5.2] - 2025-07-21
+
+### ✨ Added
+- `force` parameter to plug control methods, enabling forced state resets before sending ON/OFF commands.
+- Improved weather API fallback logic: if WeatherAPI fails, the system gracefully falls back to Open-Meteo for reliable data.
+
+### 🔧 Changed
+- `PlugScheduler` now uses the new `force` option to ensure more robust plug control during uncertain or inconsistent states.
+
+### 🛠️ Improvements
+- Enhanced resilience when fetching weather data, ensuring more consistent automation behavior even during intermittent API failures.
+
+This update improves both plug command reliability and weather data robustness for smarter automation.
 
 ---
 
